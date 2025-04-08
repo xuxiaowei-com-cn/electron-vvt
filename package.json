@@ -71,7 +71,7 @@
     "oxlint": "0.16.4",
     "pinia": "3.0.1",
     "prettier": "3.5.3",
-    "typescript": "5.8.2",
+    "typescript": "5.8.3",
     "vite": "6.2.5",
     "vite-plugin-vue-devtools": "7.7.2",
     "vitest": "3.1.1",

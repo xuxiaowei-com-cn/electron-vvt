@@ -48,7 +48,7 @@
     "electron-store": "10.0.1"
   },
   "devDependencies": {
-    "@playwright/test": "1.51.1",
+    "@playwright/test": "1.52.0",
     "@tsconfig/node22": "22.0.1",
     "@types/fs-extra": "11.0.4",
     "@types/jsdom": "21.1.7",

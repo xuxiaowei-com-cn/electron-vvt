@@ -65,7 +65,7 @@
     "electron": "35.2.0",
     "electron-builder": "26.0.12",
     "eslint": "9.25.0",
-    "eslint-plugin-oxlint": "0.16.6",
+    "eslint-plugin-oxlint": "0.16.7",
     "eslint-plugin-playwright": "2.2.0",
     "eslint-plugin-vue": "10.0.0",
     "jiti": "2.4.2",

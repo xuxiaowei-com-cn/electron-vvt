@@ -51,21 +51,21 @@ jobs:
         env:
           CSC_LINK: ${{ secrets.MAC_CERT_BASE64 }}
           CSC_KEY_PASSWORD: ${{ secrets.MAC_CERT_PASSWORD }}
-        run: npm run build
+        run: npm run build:publish
 
       - name: Windows Build with npm
         if: ${{ matrix.os == 'windows-latest' }}
         env:
           CSC_LINK: ${{ secrets.WINDOWS_CERT_BASE64 }}
           CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
-        run: npm run build
+        run: npm run build:publish
 
       - name: Linux Build with npm
         if: ${{ matrix.os == 'ubuntu-latest' }}
         env:
           CSC_LINK: ${{ secrets.LINUX_CERT_BASE64 }}
           CSC_KEY_PASSWORD: ${{ secrets.LINUX_CERT_PASSWORD }}
-        run: npm run build
+        run: npm run build:publish
 
       - name: List files in release folder
         shell: sh

@@ -58,4 +58,12 @@ export default <Configuration>{
       },
     ],
   },
+  nsis: {
+    // 禁用一键安装
+    oneClick: false,
+    // 为所有用户安装
+    perMachine: true,
+    // 允许修改安装目录
+    allowToChangeInstallationDirectory: true,
+  },
 }

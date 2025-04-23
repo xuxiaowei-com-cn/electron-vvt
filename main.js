@@ -56,7 +56,7 @@ const scheme = 'vvt'
 const registerProtocol = () => {
   protocol.handle(scheme, async (request) => {
     const url = request.url
-    const parsedUrl = url.substring(scheme.length + 3).replace(/^(\.\.(\/|\\|$))+/, '')
+    const parsedUrl = url.substring(scheme.length + 3).split('?')[0].replace(/^(\.\.(\/|\\|$))+/, '')
     const requestedPath = path.join(__dirname, parsedUrl)
     const normalizedPath = path.normalize(requestedPath)
 

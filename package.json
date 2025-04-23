@@ -31,6 +31,10 @@
     "type": "git",
     "url": "https://github.com/xuxiaowei-com-cn/electron-vvt.git"
   },
+  "bugs": {
+    "email": "xuxiaowei@xuxiaowei.com.cn",
+    "url": "https://github.com/xuxiaowei-com-cn/electron-vvt/issues"
+  },
   "keywords": [
     "electron",
     "electron-builder",

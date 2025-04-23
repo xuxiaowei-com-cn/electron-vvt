@@ -26,6 +26,8 @@ export default <Configuration>{
     'dist/**/*',
     // 程序入口文件
     'main.js',
+    // 菜单配置文件
+    'menu.js',
     // 预加载文件
     'preload.js',
     // 更新配置文件

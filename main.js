@@ -91,6 +91,11 @@ const createWindow = () => {
     },
   })
 
+  // 移除 默认的 UserAgent 中的 Electron 标识
+  const webContents = mainWindow.webContents
+  const userAgent = webContents.getUserAgent()
+  webContents.setUserAgent(userAgent.replace(/ Electron\/[\d.]+/g, ''))
+
   if (process.env.VITE_SERVER_URL) {
     mainWindow.loadURL(process.env.VITE_SERVER_URL).catch((err) => {
       log.error('mainWindow.loadURL', process.env.VITE_SERVER_URL, err)

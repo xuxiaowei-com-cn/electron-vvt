@@ -9,6 +9,7 @@ import fs from 'fs/promises'
 
 import './menu.js'
 import './updater.js'
+import './session.js'
 
 const store = new Store()
 

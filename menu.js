@@ -3,6 +3,8 @@ import { fileURLToPath } from 'url'
 import path from 'path'
 import { readFile } from 'fs/promises'
 
+import { update } from './updater.js'
+
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 const packagePath = path.join(__dirname, 'package.json')
@@ -37,8 +39,20 @@ app.whenReady().then(() => {
   // 克隆原有菜单结构（支持嵌套）
   const newTemplate = applicationMenu.items.map(convertMenuItem)
 
-  // 查找 Help 菜单：中英文适配
-  const helpMenu = newTemplate.find((item) => item.label === 'Help' || item.label === '帮助')
+  // 查找 appmenu 菜单
+  const appmenuMenu = newTemplate.find((item) => item.role === 'appmenu')
+  const aboutIndex = appmenuMenu.submenu.findIndex((item) => item.role === 'about')
+  if (aboutIndex !== -1) {
+    appmenuMenu.submenu.splice(aboutIndex + 1, 0, {
+      label: 'Check for Updates',
+      click: function () {
+        update()
+      },
+    })
+  }
+
+  // 查找 help 菜单
+  const helpMenu = newTemplate.find((item) => item.role === 'help')
 
   if (helpMenu) {
     // 初始化 submenu 数组（如果不存在）

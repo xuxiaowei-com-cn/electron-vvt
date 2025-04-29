@@ -36,3 +36,9 @@ app.on('ready', function () {
     logUpdater.info('UpdateCheckResult.updateInfo:\n', updateCheckResult.updateInfo)
   })
 })
+
+export const update = function () {
+  electronUpdater.autoUpdater.checkForUpdates().then((resp) => {
+    logUpdater.info('手动触发更新菜单结果', resp)
+  })
+}

@@ -1,4 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ElMessage } from 'element-plus'
+
+const open2 = () => {
+  ElMessage({
+    showClose: true,
+    message: 'Congrats, this is a success message.',
+    type: 'success',
+  })
+}
+</script>
 
 <template>
   <div class="home-view">
@@ -8,6 +18,8 @@
       We are using Node.js <span id="node-version"></span>, Chromium
       <span id="chrome-version"></span>, and Electron <span id="electron-version"></span>.
     </div>
+
+    <el-button :plain="true" @click="open2">Success</el-button>
   </div>
 </template>
 

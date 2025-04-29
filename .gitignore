@@ -37,3 +37,6 @@ playwright-report/
 /package-lock.json
 
 /release
+
+/auto-imports.d.ts
+/components.d.ts

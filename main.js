@@ -1,6 +1,6 @@
 // Modules to control application life and create native browser window
 
-import { app, net, protocol, BrowserWindow } from 'electron'
+import { app, BrowserWindow, net, protocol } from 'electron'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import log from 'electron-log'
@@ -39,6 +39,8 @@ const devTools = store.get('devTools')
 if (typeof devTools !== 'boolean') {
   store.set('devTools', process.env.NODE_ENV === 'development')
 }
+
+let userAgent = store.get('userAgent')
 
 // Windows 开发：C:\Users\%USERPROFILE%\AppData\Roaming\Electron\config.json
 // Windows 安装：C:\Users\%USERPROFILE%\AppData\Roaming\项目名称\config.json
@@ -93,8 +95,10 @@ const createWindow = () => {
 
   // 移除 默认的 UserAgent 中的 Electron 标识
   const webContents = mainWindow.webContents
-  const userAgent = webContents.getUserAgent()
-  webContents.setUserAgent(userAgent.replace(/ Electron\/[\d.]+/g, ''))
+  userAgent =
+    userAgent == null ? webContents.getUserAgent().replace(/ Electron\/[\d.]+/g, '') : userAgent
+  store.set('userAgent', userAgent)
+  webContents.setUserAgent(userAgent)
 
   if (process.env.VITE_SERVER_URL) {
     mainWindow.loadURL(process.env.VITE_SERVER_URL).catch((err) => {

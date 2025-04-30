@@ -39,11 +39,12 @@ app.whenReady().then(() => {
   // 克隆原有菜单结构（支持嵌套）
   const newTemplate = applicationMenu.items.map(convertMenuItem)
 
-  // 查找 appmenu 菜单
+  // 查找 Mac 系统的 appmenu 菜单
   const appmenuMenu = newTemplate.find((item) => item.role === 'appmenu')
-  const aboutIndex = appmenuMenu.submenu.findIndex((item) => item.role === 'about')
+  const aboutIndex = appmenuMenu?.submenu.findIndex((item) => item.role === 'about')
   if (aboutIndex !== -1) {
-    appmenuMenu.submenu.splice(aboutIndex + 1, 0, {
+    // 在 Mac 系统 about 菜单项之后插入 检查并更新菜单
+    appmenuMenu?.submenu.splice(aboutIndex + 1, 0, {
       label: 'Check for Updates',
       click: function () {
         update()

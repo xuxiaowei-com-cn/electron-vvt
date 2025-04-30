@@ -8,6 +8,7 @@ import Store from 'electron-store'
 import fs from 'fs/promises'
 
 import './menu.js'
+import './sqlite.js'
 import './updater.js'
 
 const store = new Store()

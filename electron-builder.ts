@@ -30,6 +30,8 @@ export default <Configuration>{
     'menu.js',
     // 预加载文件
     'preload.js',
+    // SQLite 文件
+    'sqlite.js',
     // 更新配置文件
     'updater.js',
   ],

@@ -50,7 +50,7 @@
     "vue-router"
   ],
   "dependencies": {
-    "electron-log": "5.3.4",
+    "electron-log": "5.4.0",
     "electron-store": "10.0.1",
     "electron-updater": "6.6.2"
   },

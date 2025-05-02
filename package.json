@@ -1,5 +1,6 @@
 {
   "name": "electron-vvt",
+  "description": "Electron、Vue、Vite、TypeScript 框架",
   "version": "0.0.3-dev.1",
   "type": "module",
   "author": {

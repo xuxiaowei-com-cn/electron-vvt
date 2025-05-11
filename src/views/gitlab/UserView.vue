@@ -4,7 +4,13 @@ import type { FormInstance, FormRules } from 'element-plus'
 
 import { type GitLab, gitlabStore } from '@/stores/gitlab'
 
-import { type SetCustomAttributeParams, setGitLabCustomAttribute } from '@/api/gitlab/user'
+import {
+  type GetUserParams,
+  getUsers,
+  setCustomAttribute,
+  type SetCustomAttributeParams,
+  type User,
+} from '@/api/gitlab/user'
 
 const configRef = ref<FormInstance>()
 const config = reactive<GitLab>({
@@ -72,12 +78,88 @@ watch(
 //   { deep: true },
 // )
 
-const setCustomAttribute = async (formEl: FormInstance | undefined) => {
+const loading = ref<boolean>(true)
+const tableData = reactive<User[]>([])
+const searchParams = reactive<GetUserParams>({
+  page: 1,
+  per_page: 20,
+  with_custom_attributes: true,
+})
+
+const total = ref<number>(0)
+
+const search = function (searchParams: GetUserParams) {
+  getUsers(config, searchParams).then((res) => {
+    console.log(res)
+    tableData.splice(0, tableData.length, ...res.data)
+    if (res.data.length < searchParams.per_page) {
+      total.value = searchParams.page * searchParams.per_page
+    } else {
+      total.value = searchParams.page * searchParams.per_page + 1
+    }
+    loading.value = false
+  })
+}
+
+search(searchParams)
+
+const sizeChange = (value: number) => {
+  searchParams.per_page = value
+  loading.value = true
+  search(searchParams)
+}
+
+/*const currentChange = (value: number) => {
+  console.log('currentChange', value)
+}*/
+
+const prevClick = (value: number) => {
+  searchParams.page = value
+  loading.value = true
+  search(searchParams)
+}
+
+const nextClick = (value: number) => {
+  searchParams.page = value
+  loading.value = true
+  search(searchParams)
+}
+
+const getCustomAttributes = function (
+  values: Array<{ key: string; value: string }>,
+  attributeKey: string,
+): string | undefined {
+  if (!Array.isArray(values)) {
+    return undefined
+  }
+  const item = values.find((item) => item.key === attributeKey)
+  if (attributeKey === 'amounts') {
+    return item ? '¥' + item.value : undefined
+  }
+  return item ? item.value : undefined
+}
+
+const dateFormatter = (text: string) => {
+  const date = new Date(text)
+  if (isNaN(date.getTime())) {
+    // 或者返回默认值，如 'Invalid Date'
+    return ''
+  }
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  const seconds = String(date.getSeconds()).padStart(2, '0')
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
+
+const setGitLabCustomAttribute = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
       console.log('submit!')
-      setGitLabCustomAttribute(config, custom)
+      setCustomAttribute(config, custom)
     } else {
       console.log('error submit!', fields)
     }
@@ -125,10 +207,105 @@ const setCustomAttribute = async (formEl: FormInstance | undefined) => {
       <el-form-item label="GitLab value" prop="value">
         <el-input v-model="custom.value" />
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="setGitLabCustomAttribute(customRef)"
+          >Set Custom Attribute
+        </el-button>
+      </el-form-item>
     </el-form>
-    <el-button type="primary" @click="setCustomAttribute(customRef)"
-      >Set Custom Attribute
-    </el-button>
+
+    <!-- @current-change="currentChange" -->
+    <el-pagination
+      size="small"
+      background
+      layout="sizes, prev, jumper, next"
+      :default-page-size="searchParams.per_page"
+      :page-sizes="[10, 20, 50, 100]"
+      :total="total"
+      @size-change="sizeChange"
+      @prev-click="prevClick"
+      @next-click="nextClick"
+    />
+    <el-table v-loading="loading" :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="50" />
+      <el-table-column prop="username" label="username" width="100" />
+      <el-table-column prop="name" label="name" width="140" />
+      <el-table-column prop="avatar_url" label="avatar" width="70">
+        <template #default="{ row }">
+          <el-avatar :src="row.avatar_url" />
+        </template>
+      </el-table-column>
+      <el-table-column prop="email" label="email" width="220" />
+      <el-table-column prop="state" label="state" width="80">
+        <template #default="{ row }">
+          <el-tag v-if="row.state === 'blocked'" type="danger">已禁用</el-tag>
+          <span v-else><!-- {{ row.state }} --></span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="is_admin" label="is_admin" width="90">
+        <template #default="{ row }">
+          <el-tag v-if="row.is_admin === true" type="success">管理员</el-tag>
+          <span v-else><!-- {{ row.is_admin }} --></span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="two_factor_enabled" label="Two Factor" width="100">
+        <template #default="{ row }">
+          <el-tag v-if="row.two_factor_enabled === true" type="success">已启用</el-tag>
+          <span v-else><!-- {{ row.two_factor_enabled }} --></span>
+        </template>
+      </el-table-column>
+      <!--<el-table-column prop="locked" label="locked" width="80" />-->
+      <el-table-column
+        prop="custom_attributes"
+        label="UID"
+        width="110"
+        :formatter="
+          (row: any, column: any, cellValue: any, index: number) =>
+            getCustomAttributes(cellValue, 'upower')
+        "
+      />
+      <el-table-column
+        prop="custom_attributes"
+        label="Expires At"
+        width="110"
+        :formatter="
+          (row: any, column: any, cellValue: any, index: number) =>
+            getCustomAttributes(cellValue, 'expires_at')
+        "
+      />
+      <el-table-column
+        prop="custom_attributes"
+        label="days"
+        width="60"
+        :formatter="
+          (row: any, column: any, cellValue: any, index: number) =>
+            getCustomAttributes(cellValue, 'days')
+        "
+      />
+      <el-table-column
+        prop="custom_attributes"
+        label="amounts"
+        width="90"
+        :formatter="
+          (row: any, column: any, cellValue: any, index: number) =>
+            getCustomAttributes(cellValue, 'amounts')
+        "
+      />
+      <el-table-column
+        prop="created_at"
+        label="Created At"
+        width="180"
+        :formatter="
+          (row: any, column: any, cellValue: string, index: number) => dateFormatter(cellValue)
+        "
+      />
+      <el-table-column prop="created_by.name" label="Created By" width="100" />
+      <el-table-column fixed="right" label="Operations" min-width="100">
+        <template #default>
+          <el-button link type="primary" size="small">自定义属性</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 

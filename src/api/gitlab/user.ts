@@ -7,7 +7,45 @@ export interface SetCustomAttributeParams {
   value: string | number
 }
 
-export async function setGitLabCustomAttribute(
+export interface GetUserParams {
+  page: number
+  per_page: number
+  with_custom_attributes: boolean
+}
+
+export interface User {
+  id: number
+  name: string
+}
+
+/**
+ * 列出用户：https://gitlab.cn/docs/jh/api/users.html
+ */
+export async function getUsers(
+  config: GitLab,
+  params: GetUserParams = { page: 1, per_page: 10, with_custom_attributes: true },
+): Promise<AxiosResponse<User[]>> {
+  try {
+    const url = `${config.domain}/api/v4/users`
+
+    return await axios.get<User[]>(url, {
+      headers: {
+        'PRIVATE-TOKEN': config.token,
+      },
+      params: {
+        ...params,
+      },
+    })
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      // 处理 Axios 错误
+      throw new Error(`GitLab API request failed: ${error.message}`)
+    }
+    throw new Error('Unexpected error occurred')
+  }
+}
+
+export async function setCustomAttribute(
   config: GitLab,
   params: SetCustomAttributeParams,
 ): Promise<AxiosResponse> {

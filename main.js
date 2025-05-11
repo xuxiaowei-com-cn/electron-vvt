@@ -7,6 +7,7 @@ import log from 'electron-log'
 import Store from 'electron-store'
 import fs from 'fs/promises'
 
+import './ipc-main.js'
 import './menu.js'
 import './updater.js'
 import './session.js'

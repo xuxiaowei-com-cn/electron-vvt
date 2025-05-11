@@ -69,11 +69,11 @@ const gitlabStore = useGitlabStore(createPinia())
 // 订阅缓存的修改
 gitlabStore.$subscribe((mutation, state) => {
   // 将缓存的修改放入本地缓存中
-  localStorage.setItem(gitlabStore.$id, JSON.stringify({ ...state }))
+  window.LocalStorage.setItem(gitlabStore.$id, JSON.stringify({ ...state }))
 })
 
 // 获取历史缓存
-const useStoreOld = localStorage.getItem(gitlabStore.$id)
+const useStoreOld = window.LocalStorage.getItem(gitlabStore.$id)
 if (useStoreOld) {
   // 返回已存在的缓存
   gitlabStore.$state = JSON.parse(useStoreOld)

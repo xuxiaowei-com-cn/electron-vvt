@@ -24,6 +24,8 @@ export default <Configuration>{
   files: [
     // Vite 打包后的文件
     'dist/**/*',
+    // 与主进程通信
+    'ipc-main.js',
     // 程序入口文件
     'main.js',
     // 菜单配置文件

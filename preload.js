@@ -7,6 +7,9 @@
  * https://www.electronjs.org/docs/latest/tutorial/sandbox
  */
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { ipcRenderer, contextBridge } = require('electron')
+
 console.log('preload.js')
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -20,4 +23,9 @@ window.addEventListener('DOMContentLoaded', () => {
   for (const type of ['chrome', 'node', 'electron']) {
     replaceText(`${type}-version`, process.versions[type])
   }
+})
+
+contextBridge.exposeInMainWorld('LocalStorage', {
+  setItem: (key, value) => ipcRenderer.sendSync('set-item', key, value),
+  getItem: (key) => ipcRenderer.sendSync('get-item', key),
 })

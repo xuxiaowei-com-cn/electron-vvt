@@ -42,6 +42,9 @@ export const useGitlabStore = defineStore('gitlab', {
       }
     },
     getConfig(domain: string): GitLab | undefined {
+      if (!domain) {
+        return undefined
+      }
       try {
         const normalizedDomain = new URL(domain.trim()).origin
         return this.configs.find((item) => item.domain === normalizedDomain)

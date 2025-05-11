@@ -10,6 +10,11 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/session/webRequests',
+      name: 'session webRequests',
+      component: () => import('../views/session/WebRequestsView.vue'),
+    },
+    {
       path: '/gitlab/user',
       name: 'gitlab user',
       component: () => import('../views/gitlab/UserView.vue'),

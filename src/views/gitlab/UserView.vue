@@ -33,6 +33,7 @@ const handleClose = () => {
 }
 const customAttributeClick = (id: number) => {
   dialogVisible.value = true
+  user.value = undefined
   getUser(config, id).then((res) => {
     console.log(res.data)
     user.value = res.data

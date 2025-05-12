@@ -5,17 +5,12 @@ console.log(sessionWebRequestsStore.configs)
 
 const tableData = sessionWebRequestsStore.configs
 
+// sessionWebRequestsStore.clearConfig()
 // sessionWebRequestsStore.setConfig({
 //   id: new Date().getTime(),
-//   "urls": [
-//     "*://gitlab.xuxiaowei.com.cn/*"
-//   ],
-//   "access-control-allow-headers": [
-//     "private-token"
-//   ],
-//   "access-control-allow-methods": [
-//     "PUT"
-//   ]
+//   urls: ['*://gitlab.xuxiaowei.com.cn/*'],
+//   'access-control-allow-headers': ['private-token'],
+//   'access-control-allow-methods': ['PUT', 'DELETE'],
 // })
 </script>
 

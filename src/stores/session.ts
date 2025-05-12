@@ -21,6 +21,9 @@ export const useSessionWebRequestsStore = defineStore('session.webRequests', {
     setConfig(session: Session) {
       this.configs.push(session)
     },
+    clearConfig() {
+      this.configs = []
+    },
     // 添加删除配置的方法
     removeConfig(id: number) {
       const index = this.configs.findIndex((item) => item.id === id)

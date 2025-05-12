@@ -5,6 +5,9 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { type GitLab, gitlabStore } from '@/stores/gitlab'
 
 import {
+  type CustomAttribute,
+  deleteCustomAttribute,
+  getUser,
   type GetUserParams,
   getUsers,
   setCustomAttribute,
@@ -21,6 +24,31 @@ const configRules = reactive<FormRules<GitLab>>({
   domain: [{ required: true, message: '域名 必填', trigger: 'blur' }],
   token: [{ required: true, message: 'Token 必填', trigger: 'blur' }],
 })
+
+const dialogVisible = ref<boolean>(false)
+const user = ref<User>()
+const handleClose = () => {
+  user.value = undefined
+  dialogVisible.value = false
+}
+const customAttributeClick = (id: number) => {
+  dialogVisible.value = true
+  getUser(config, id).then((res) => {
+    console.log(res.data)
+    user.value = res.data
+  })
+}
+const saveGitLabCustomAttribute = (customAttribute: CustomAttribute) => {
+  console.log('saveCustomAttribute', customAttribute)
+}
+const deleteGitLabCustomAttribute = (key: string) => {
+  deleteCustomAttribute(config, user.value?.id as number, key).then((res) => {
+    console.log('deleteGitLabCustomAttribute', res)
+  })
+}
+const addGitLabCustomAttribute = () => {
+  console.log('addCustomAttribute')
+}
 
 const customRef = ref<FormInstance>()
 const custom = reactive<SetCustomAttributeParams>({
@@ -84,6 +112,7 @@ const searchParams = reactive<GetUserParams>({
   page: 1,
   per_page: 20,
   with_custom_attributes: true,
+  sort: 'desc',
 })
 
 const total = ref<number>(0)
@@ -197,6 +226,28 @@ const setGitLabCustomAttribute = async (formEl: FormInstance | undefined) => {
       </el-form-item>
     </el-form>
 
+    <el-dialog v-model="dialogVisible" title="自定义属性" width="500" :before-close="handleClose">
+      <el-form label-width="auto" style="">
+        <el-form-item
+          v-for="(item, index) in user?.custom_attributes"
+          :key="index"
+          :label="item.key"
+        >
+          <div class="">
+            <el-input v-model="item.value" style="width: 150px; margin-right: 15px" />
+            <el-button type="primary" @click="saveGitLabCustomAttribute(item)">保存</el-button>
+            <el-button type="danger" @click="deleteGitLabCustomAttribute(item.key)">删除</el-button>
+            <el-button type="success" @click="addGitLabCustomAttribute">增加</el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogVisible = false">关闭</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
     <el-form ref="customRef" :model="custom" :rules="customRules" label-width="auto" style="">
       <el-form-item label="GitLab userId" prop="userId">
         <el-input v-model="custom.userId" />
@@ -301,8 +352,10 @@ const setGitLabCustomAttribute = async (formEl: FormInstance | undefined) => {
       />
       <el-table-column prop="created_by.name" label="Created By" width="100" />
       <el-table-column fixed="right" label="Operations" min-width="100">
-        <template #default>
-          <el-button link type="primary" size="small">自定义属性</el-button>
+        <template #default="{ row }">
+          <el-button link type="primary" size="small" @click="customAttributeClick(row.id)"
+            >自定义属性
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

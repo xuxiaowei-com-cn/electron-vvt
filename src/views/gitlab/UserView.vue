@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 
 import { type GitLab, gitlabStore } from '@/stores/gitlab'
 
@@ -11,7 +12,6 @@ import {
   type GetUserParams,
   getUsers,
   setCustomAttribute,
-  type SetCustomAttributeParams,
   type User,
 } from '@/api/gitlab/user'
 
@@ -25,11 +25,20 @@ const configRules = reactive<FormRules<GitLab>>({
   token: [{ required: true, message: 'Token 必填', trigger: 'blur' }],
 })
 
+export interface AddCustomAttribute extends CustomAttribute {
+  id: number
+  input: boolean
+}
+
+const addCustomAttributes = ref<AddCustomAttribute[]>([])
+
 const dialogVisible = ref<boolean>(false)
 const user = ref<User>()
 const handleClose = () => {
   user.value = undefined
   dialogVisible.value = false
+  addCustomAttributes.value = []
+  search(searchParams)
 }
 const customAttributeClick = (id: number) => {
   dialogVisible.value = true
@@ -37,31 +46,54 @@ const customAttributeClick = (id: number) => {
   getUser(config, id).then((res) => {
     console.log(res.data)
     user.value = res.data
+    if (user.value?.custom_attributes.length === 0) {
+      addCustomAttributes.value.push({ id: new Date().getTime(), key: '', value: '', input: true })
+    }
   })
 }
-const saveGitLabCustomAttribute = (customAttribute: CustomAttribute) => {
-  console.log('saveCustomAttribute', customAttribute)
+const saveGitLabCustomAttribute = (customAttribute: CustomAttribute | AddCustomAttribute) => {
+  const params = {
+    userId: user.value?.id as number,
+    attributeKey: customAttribute.key,
+    value: customAttribute.value,
+  }
+  setCustomAttribute(config, params).then((res) => {
+    console.log('saveGitLabCustomAttribute', res)
+    if ('id' in customAttribute) {
+      addCustomAttributes.value.forEach((item) => {
+        if (item.id === customAttribute.id) {
+          item.input = false
+        }
+      })
+    }
+  })
 }
+const deleteNullCustomAttribute = (id: number) => {
+  addCustomAttributes.value = addCustomAttributes.value.filter((item) => item.id !== id)
+}
+
 const deleteGitLabCustomAttribute = (key: string) => {
   deleteCustomAttribute(config, user.value?.id as number, key).then((res) => {
     console.log('deleteGitLabCustomAttribute', res)
+    if (user.value?.custom_attributes) {
+      user.value.custom_attributes = user.value?.custom_attributes.filter(
+        (item) => item.key !== key,
+      )
+      if (user.value?.custom_attributes.length === 0) {
+        addCustomAttributes.value.push({
+          id: new Date().getTime(),
+          key: '',
+          value: '',
+          input: true,
+        })
+      }
+    }
   })
 }
 const addGitLabCustomAttribute = () => {
+  addCustomAttributes.value.push({ id: new Date().getTime(), key: '', value: '', input: true })
   console.log('addCustomAttribute')
 }
-
-const customRef = ref<FormInstance>()
-const custom = reactive<SetCustomAttributeParams>({
-  userId: '',
-  attributeKey: '',
-  value: '',
-})
-const customRules = reactive<FormRules<SetCustomAttributeParams>>({
-  userId: [{ required: true, message: '用户ID 必填', trigger: 'blur' }],
-  attributeKey: [{ required: true, message: '属性键 必填', trigger: 'blur' }],
-  value: [{ required: true, message: '属性值 必填', trigger: 'blur' }],
-})
 
 const options = gitlabStore.getConfigs
 
@@ -119,6 +151,7 @@ const searchParams = reactive<GetUserParams>({
 const total = ref<number>(0)
 
 const search = function (searchParams: GetUserParams) {
+  loading.value = true
   getUsers(config, searchParams).then((res) => {
     console.log(res)
     tableData.splice(0, tableData.length, ...res.data)
@@ -133,9 +166,13 @@ const search = function (searchParams: GetUserParams) {
 
 search(searchParams)
 
+const searchClick = () => {
+  searchParams.page = 1
+  search(searchParams)
+}
+
 const sizeChange = (value: number) => {
   searchParams.per_page = value
-  loading.value = true
   search(searchParams)
 }
 
@@ -145,13 +182,11 @@ const sizeChange = (value: number) => {
 
 const prevClick = (value: number) => {
   searchParams.page = value
-  loading.value = true
   search(searchParams)
 }
 
 const nextClick = (value: number) => {
   searchParams.page = value
-  loading.value = true
   search(searchParams)
 }
 
@@ -182,18 +217,6 @@ const dateFormatter = (text: string) => {
   const minutes = String(date.getMinutes()).padStart(2, '0')
   const seconds = String(date.getSeconds()).padStart(2, '0')
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
-}
-
-const setGitLabCustomAttribute = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      console.log('submit!')
-      setCustomAttribute(config, custom)
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
 }
 </script>
 
@@ -233,51 +256,76 @@ const setGitLabCustomAttribute = async (formEl: FormInstance | undefined) => {
           v-for="(item, index) in user?.custom_attributes"
           :key="index"
           :label="item.key"
+          label-width="100px"
         >
           <div class="">
             <el-input v-model="item.value" style="width: 150px; margin-right: 15px" />
             <el-button type="primary" @click="saveGitLabCustomAttribute(item)">保存</el-button>
             <el-button type="danger" @click="deleteGitLabCustomAttribute(item.key)">删除</el-button>
-            <el-button type="success" @click="addGitLabCustomAttribute">增加</el-button>
+            <div style="float: right; margin-left: 12px">
+              <el-icon @click="addGitLabCustomAttribute" size="32" style="cursor: pointer">
+                <Plus />
+              </el-icon>
+            </div>
+          </div>
+        </el-form-item>
+
+        <el-form-item
+          v-for="(item, index) in addCustomAttributes"
+          :key="index"
+          :label="item.key"
+          label-width="100px"
+        >
+          <template #label>
+            <div v-if="item.input">
+              <el-input v-model="item.key" />
+            </div>
+            <div v-else>
+              {{ item.key }}
+            </div>
+          </template>
+          <div class="">
+            <el-input v-model="item.value" style="width: 150px; margin-right: 15px" />
+            <el-button type="primary" @click="saveGitLabCustomAttribute(item)">保存</el-button>
+            <el-button
+              type="danger"
+              @click="deleteNullCustomAttribute(item.id)"
+              :disabled="item.input && addCustomAttributes.length === 1"
+              >删除
+            </el-button>
+            <div style="float: right; margin-left: 12px">
+              <el-icon @click="addGitLabCustomAttribute" size="32" style="cursor: pointer">
+                <Plus />
+              </el-icon>
+            </div>
           </div>
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialogVisible = false">关闭</el-button>
+          <el-button @click="handleClose">关闭</el-button>
         </div>
       </template>
     </el-dialog>
 
-    <el-form ref="customRef" :model="custom" :rules="customRules" label-width="auto" style="">
-      <el-form-item label="GitLab userId" prop="userId">
-        <el-input v-model="custom.userId" />
-      </el-form-item>
-      <el-form-item label="GitLab attributeKey" prop="attributeKey">
-        <el-input v-model="custom.attributeKey" />
-      </el-form-item>
-      <el-form-item label="GitLab value" prop="value">
-        <el-input v-model="custom.value" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="setGitLabCustomAttribute(customRef)"
-          >Set Custom Attribute
-        </el-button>
-      </el-form-item>
-    </el-form>
+    <el-button type="primary" @click="searchClick">搜索</el-button>
 
     <!-- @current-change="currentChange" -->
     <el-pagination
       size="small"
       background
-      layout="sizes, prev, jumper, next"
+      layout="sizes, prev, slot, next"
       :default-page-size="searchParams.per_page"
       :page-sizes="[10, 20, 50, 100]"
       :total="total"
       @size-change="sizeChange"
       @prev-click="prevClick"
       @next-click="nextClick"
-    />
+    >
+      <template #default>
+        <span style="margin-left: 5px; margin-right: 5px">{{ searchParams.page }}</span>
+      </template>
+    </el-pagination>
     <el-table v-loading="loading" :data="tableData" style="width: 100%">
       <el-table-column prop="id" label="ID" width="50" />
       <el-table-column prop="username" label="username" width="100" />

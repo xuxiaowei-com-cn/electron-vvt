@@ -40,6 +40,39 @@ const handleClose = () => {
   addCustomAttributes.value = []
   search(searchParams)
 }
+
+const validatorErrorClass = ref<string>('validator-error')
+
+const valueBlur = (e: FocusEvent) => {
+  console.log('valueBlur', e)
+  const target = e.target as HTMLElement // 类型断言
+  user.value?.custom_attributes.forEach((item) => {
+    if (item.key === target.dataset.key) {
+      item.valueClassName = item.value === '' ? validatorErrorClass.value : ''
+    }
+  })
+}
+
+const addValueBlur = (e: FocusEvent) => {
+  console.log('addValueBlur', e)
+  const target = e.target as HTMLElement // 类型断言
+  addCustomAttributes.value.forEach((item) => {
+    if (item.id + '' === target.dataset.id) {
+      item.valueClassName = item.value === '' ? validatorErrorClass.value : ''
+    }
+  })
+}
+
+const addKeyBlur = (e: FocusEvent) => {
+  console.log('addKeyBlur', e)
+  const target = e.target as HTMLElement // 类型断言
+  addCustomAttributes.value.forEach((item) => {
+    if (item.id + '' === target.dataset.id) {
+      item.keyClassName = item.key === '' ? validatorErrorClass.value : ''
+    }
+  })
+}
+
 const customAttributeClick = (id: number) => {
   dialogVisible.value = true
   user.value = undefined
@@ -47,11 +80,62 @@ const customAttributeClick = (id: number) => {
     console.log(res.data)
     user.value = res.data
     if (user.value?.custom_attributes.length === 0) {
-      addCustomAttributes.value.push({ id: new Date().getTime(), key: '', value: '', input: true })
+      addCustomAttributes.value.push({
+        id: new Date().getTime(),
+        key: '',
+        keyClassName: '',
+        value: '',
+        valueClassName: '',
+        input: true,
+      })
     }
   })
 }
 const saveGitLabCustomAttribute = (customAttribute: CustomAttribute | AddCustomAttribute) => {
+  const skip = customAttribute.key === '' || customAttribute.value === ''
+
+  if (customAttribute.key === '') {
+    if ('id' in customAttribute) {
+      addCustomAttributes.value.forEach((item) => {
+        if (item.id === customAttribute.id) {
+          item.keyClassName = validatorErrorClass.value
+        }
+      })
+    }
+  }
+
+  if (customAttribute.value === '') {
+    if ('id' in customAttribute) {
+      addCustomAttributes.value.forEach((item) => {
+        if (item.id === customAttribute.id) {
+          item.valueClassName = validatorErrorClass.value
+        }
+      })
+    } else {
+      user.value?.custom_attributes.forEach((item) => {
+        if (item.key === customAttribute.key) {
+          item.valueClassName = validatorErrorClass.value
+        }
+      })
+    }
+  }
+
+  if (skip) {
+    return
+  }
+
+  user.value?.custom_attributes.forEach((item) => {
+    if (item.key === customAttribute.key) {
+      item.valueClassName = ''
+    }
+  })
+
+  addCustomAttributes.value.forEach((item) => {
+    if (item.key === customAttribute.key) {
+      item.valueClassName = ''
+    }
+  })
+
   const params = {
     userId: user.value?.id as number,
     attributeKey: customAttribute.key,
@@ -83,7 +167,9 @@ const deleteGitLabCustomAttribute = (key: string) => {
         addCustomAttributes.value.push({
           id: new Date().getTime(),
           key: '',
+          keyClassName: '',
           value: '',
+          valueClassName: '',
           input: true,
         })
       }
@@ -91,7 +177,14 @@ const deleteGitLabCustomAttribute = (key: string) => {
   })
 }
 const addGitLabCustomAttribute = () => {
-  addCustomAttributes.value.push({ id: new Date().getTime(), key: '', value: '', input: true })
+  addCustomAttributes.value.push({
+    id: new Date().getTime(),
+    key: '',
+    keyClassName: '',
+    value: '',
+    valueClassName: '',
+    input: true,
+  })
   console.log('addCustomAttribute')
 }
 
@@ -145,7 +238,7 @@ const searchParams = reactive<GetUserParams>({
   page: 1,
   per_page: 20,
   with_custom_attributes: true,
-  sort: 'desc',
+  sort: 'asc',
 })
 
 const total = ref<number>(0)
@@ -255,15 +348,24 @@ const dateFormatter = (text: string) => {
           :label="item.key"
           label-width="100px"
         >
-          <div class="">
-            <el-input v-model="item.value" style="width: 150px; margin-right: 15px" />
-            <el-button type="primary" @click="saveGitLabCustomAttribute(item)">保存</el-button>
-            <el-button type="danger" @click="deleteGitLabCustomAttribute(item.key)">删除</el-button>
-            <div style="float: right; margin-left: 12px">
-              <el-icon @click="addGitLabCustomAttribute" size="32" style="cursor: pointer">
-                <Plus />
-              </el-icon>
-            </div>
+          <el-input
+            @blur="valueBlur"
+            :data-key="item.key"
+            :class="item.valueClassName"
+            v-model="item.value"
+            style="width: 150px; margin-right: 15px"
+          />
+          <el-button type="primary" @click="saveGitLabCustomAttribute(item)">保存</el-button>
+          <el-button type="danger" @click="deleteGitLabCustomAttribute(item.key)">删除</el-button>
+          <el-icon
+            @click="addGitLabCustomAttribute"
+            size="32"
+            style="cursor: pointer; margin-left: 12px"
+          >
+            <Plus />
+          </el-icon>
+          <div v-if="item.valueClassName === validatorErrorClass" class="el-form-item__error">
+            value 必填
           </div>
         </el-form-item>
 
@@ -274,27 +376,46 @@ const dateFormatter = (text: string) => {
           label-width="100px"
         >
           <template #label>
-            <div v-if="item.input">
-              <el-input v-model="item.key" />
+            <div v-if="item.input" class="el-form-item__content">
+              <el-input
+                @blur="addKeyBlur"
+                :data-id="item.id"
+                :class="item.keyClassName"
+                v-model="item.key"
+              />
+              <div v-if="item.keyClassName === validatorErrorClass" class="el-form-item__error">
+                key 必填
+              </div>
             </div>
             <div v-else>
               {{ item.key }}
             </div>
           </template>
-          <div class="">
-            <el-input v-model="item.value" style="width: 150px; margin-right: 15px" />
-            <el-button type="primary" @click="saveGitLabCustomAttribute(item)">保存</el-button>
-            <el-button
-              type="danger"
-              @click="deleteNullCustomAttribute(item.id)"
-              :disabled="item.input && addCustomAttributes.length === 1"
-              >删除
-            </el-button>
-            <div style="float: right; margin-left: 12px">
-              <el-icon @click="addGitLabCustomAttribute" size="32" style="cursor: pointer">
-                <Plus />
-              </el-icon>
-            </div>
+          <el-input
+            @blur="addValueBlur"
+            :data-id="item.id"
+            :class="item.valueClassName"
+            v-model="item.value"
+            style="width: 150px; margin-right: 15px"
+          />
+          <el-button type="primary" @click="saveGitLabCustomAttribute(item)">保存</el-button>
+          <el-button
+            type="danger"
+            @click="deleteNullCustomAttribute(item.id)"
+            :disabled="
+              !user?.custom_attributes.length && item.input && addCustomAttributes.length === 1
+            "
+            >删除
+          </el-button>
+          <el-icon
+            @click="addGitLabCustomAttribute"
+            size="32"
+            style="cursor: pointer; margin-left: 12px"
+          >
+            <Plus />
+          </el-icon>
+          <div v-if="item.valueClassName === validatorErrorClass" class="el-form-item__error">
+            value 必填
           </div>
         </el-form-item>
       </el-form>
@@ -330,7 +451,7 @@ const dateFormatter = (text: string) => {
           <el-avatar :src="row.avatar_url" />
         </template>
       </el-table-column>
-      <el-table-column prop="email" label="email" width="220" />
+      <el-table-column prop="email" label="email" width="260" />
       <el-table-column prop="state" label="state" width="80">
         <template #default="{ row }">
           <el-tag v-if="row.state === 'blocked'" type="danger">已禁用</el-tag>
@@ -406,4 +527,8 @@ const dateFormatter = (text: string) => {
   </div>
 </template>
 
-<style scoped></style>
+<style>
+.validator-error > .el-input__wrapper {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+</style>

@@ -16,7 +16,9 @@ export interface GetUserParams {
 
 export interface CustomAttribute {
   key: string
+  keyClassName: string
   value: string
+  valueClassName: string
 }
 
 export interface User {

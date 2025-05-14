@@ -155,11 +155,7 @@ const search = function (searchParams: GetUserParams) {
   getUsers(config, searchParams).then((res) => {
     console.log(res)
     tableData.splice(0, tableData.length, ...res.data)
-    if (res.data.length < searchParams.per_page) {
-      total.value = searchParams.page * searchParams.per_page
-    } else {
-      total.value = searchParams.page * searchParams.per_page + 1
-    }
+    total.value = parseInt(res.headers['x-total'])
     loading.value = false
   })
 }
@@ -176,9 +172,10 @@ const sizeChange = (value: number) => {
   search(searchParams)
 }
 
-/*const currentChange = (value: number) => {
-  console.log('currentChange', value)
-}*/
+const currentChange = (value: number) => {
+  searchParams.page = value
+  search(searchParams)
+}
 
 const prevClick = (value: number) => {
   searchParams.page = value
@@ -314,17 +311,15 @@ const dateFormatter = (text: string) => {
     <el-pagination
       size="small"
       background
-      layout="sizes, prev, slot, next"
+      layout="sizes, prev, pager, next, jumper"
       :default-page-size="searchParams.per_page"
       :page-sizes="[10, 20, 50, 100]"
       :total="total"
+      @current-change="currentChange"
       @size-change="sizeChange"
       @prev-click="prevClick"
       @next-click="nextClick"
     >
-      <template #default>
-        <span style="margin-left: 5px; margin-right: 5px">{{ searchParams.page }}</span>
-      </template>
     </el-pagination>
     <el-table v-loading="loading" :data="tableData" style="width: 100%">
       <el-table-column prop="id" label="ID" width="50" />

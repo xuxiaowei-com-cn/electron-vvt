@@ -471,6 +471,13 @@ const dateFormatter = (text: string) => {
         </template>
       </el-table-column>
       <!--<el-table-column prop="locked" label="locked" width="80" />-->
+      <el-table-column prop="projects_limit" label="Projects Limit" width="120">
+        <template #default="{ row }">
+          <span :style="{ color: row.projects_limit > 0 ? 'blue' : 'inherit' }">
+            {{ row.projects_limit }}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="custom_attributes"
         label="UID"
@@ -516,6 +523,15 @@ const dateFormatter = (text: string) => {
         "
       />
       <el-table-column prop="created_by.name" label="Created By" width="100" />
+      <el-table-column
+        prop="custom_attributes"
+        label="wx"
+        width="90"
+        :formatter="
+          (row: any, column: any, cellValue: any, index: number) =>
+            getCustomAttributes(cellValue, 'wx')
+        "
+      />
       <el-table-column fixed="right" label="Operations" min-width="100">
         <template #default="{ row }">
           <el-button link type="primary" size="small" @click="customAttributeClick(row.id)"

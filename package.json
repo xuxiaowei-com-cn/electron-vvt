@@ -69,7 +69,7 @@
     "@vue/tsconfig": "0.7.0",
     "electron": "36.3.2",
     "electron-builder": "26.0.12",
-    "eslint": "9.27.0",
+    "eslint": "9.28.0",
     "eslint-plugin-oxlint": "0.17.0",
     "eslint-plugin-playwright": "2.2.0",
     "eslint-plugin-vue": "10.1.0",

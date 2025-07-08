@@ -80,7 +80,7 @@
     "pinia": "3.0.3",
     "prettier": "3.6.2",
     "typescript": "5.8.3",
-    "vite": "7.0.2",
+    "vite": "7.0.3",
     "vite-plugin-vue-devtools": "7.7.7",
     "vitest": "3.2.4",
     "vue": "3.5.17",

@@ -470,6 +470,30 @@ const dateFormatter = (text: string) => {
           <span v-else><!-- {{ row.two_factor_enabled }} --></span>
         </template>
       </el-table-column>
+      <el-table-column prop="two_factor_enabled" label="DingTalk" width="100">
+        <template #default="{ row }">
+          <template v-for="(item, index) in row.identities" :key="index">
+            <el-tag v-if="item.provider === 'dingtalk'" type="success">已启用</el-tag>
+            <span v-else></span>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column prop="two_factor_enabled" label="GitHub" width="100">
+        <template #default="{ row }">
+          <template v-for="(item, index) in row.identities" :key="index">
+            <el-tag v-if="item.provider === 'github'" type="success">已启用</el-tag>
+            <span v-else></span>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column prop="two_factor_enabled" label="GitLab" width="100">
+        <template #default="{ row }">
+          <template v-for="(item, index) in row.identities" :key="index">
+            <el-tag v-if="item.provider === 'gitlab'" type="success">已启用</el-tag>
+            <span v-else></span>
+          </template>
+        </template>
+      </el-table-column>
       <!--<el-table-column prop="locked" label="locked" width="80" />-->
       <el-table-column prop="projects_limit" label="Projects Limit" width="120">
         <template #default="{ row }">

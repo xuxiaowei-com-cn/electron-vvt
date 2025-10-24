@@ -67,7 +67,7 @@
     "@vue/eslint-config-typescript": "14.6.0",
     "@vue/test-utils": "2.4.6",
     "@vue/tsconfig": "0.8.1",
-    "electron": "38.3.0",
+    "electron": "38.4.0",
     "electron-builder": "26.0.12",
     "eslint": "9.38.0",
     "eslint-plugin-oxlint": "1.23.0",

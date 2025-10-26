@@ -24,7 +24,7 @@
     "test:e2e": "playwright test",
     "type-check": "vue-tsc --build",
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
-    "lint:eslint": "eslint . --fix",
+    "lint:eslint": "eslint . --fix --cache",
     "lint": "run-s lint:*",
     "format": "prettier --write e2e/ src/ .*.json *.json *.js *.ts"
   },

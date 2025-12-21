@@ -76,7 +76,7 @@
     "jiti": "2.6.1",
     "jsdom": "27.3.0",
     "npm-run-all2": "8.0.4",
-    "oxlint": "1.33.0",
+    "oxlint": "1.34.0",
     "pinia": "3.0.4",
     "prettier": "3.7.4",
     "typescript": "5.9.3",

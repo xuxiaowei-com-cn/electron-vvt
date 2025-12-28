@@ -74,7 +74,7 @@
     "eslint-plugin-playwright": "2.4.0",
     "eslint-plugin-vue": "10.6.2",
     "jiti": "2.6.1",
-    "jsdom": "27.3.0",
+    "jsdom": "27.4.0",
     "npm-run-all2": "8.0.4",
     "oxlint": "1.35.0",
     "pinia": "3.0.4",

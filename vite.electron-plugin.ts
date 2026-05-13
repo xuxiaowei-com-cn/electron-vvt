@@ -1,4 +1,4 @@
-import { ConfigEnv, Plugin, PreviewServer, UserConfig, ViteDevServer } from 'vite'
+import type { ConfigEnv, Plugin, PreviewServer, UserConfig, ViteDevServer } from 'vite'
 import { type ChildProcess, spawn } from 'child_process'
 import electron from 'electron'
 import path from 'path'
@@ -32,7 +32,7 @@ export interface ElectronPluginOptions {
 export default function electronPlugin(options: ElectronPluginOptions = {}): Plugin {
   return {
     name: 'vite-electron-plugin',
-    apply: function (config: UserConfig, env: ConfigEnv) {
+    apply: function (_config: UserConfig, env: ConfigEnv) {
       return env.command === 'serve' || env.command === 'build'
     },
     closeBundle() {
@@ -60,19 +60,27 @@ export default function electronPlugin(options: ElectronPluginOptions = {}): Plu
 function electronServer(
   options: ElectronPluginOptions = {},
   server: ViteDevServer | PreviewServer,
-  isPreview: boolean,
+  _isPreview: boolean,
 ) {
   const { entry = 'main.js' } = options
   let electronProcess: ChildProcess | null = null
 
-  process.env.VITE_SERVER_URL =
-    server.resolvedUrls?.local[0] ||
-    server.resolvedUrls?.network[0] ||
-    `http://localhost:${isPreview ? server.config.preview.port : server.config.server.port}`
-
   const electronCmd = electron.toString()
 
   const startElectron = () => {
+    // 在服务器实际监听后再设置 VITE_SERVER_URL，避免端口被占用时取到错误的端口
+    const httpServer = server.httpServer
+    if (httpServer) {
+      const address = httpServer.address()
+      if (address && typeof address === 'object') {
+        process.env.VITE_SERVER_URL =
+          server.resolvedUrls?.local[0] ||
+          server.resolvedUrls?.network[0] ||
+          `http://localhost:${address.port}`
+      }
+    }
+    console.log('process.env.VITE_SERVER_URL:', process.env.VITE_SERVER_URL)
+
     if (electronProcess) {
       electronProcess.removeAllListeners()
       electronProcess.kill('SIGINT')
@@ -86,7 +94,11 @@ function electronServer(
     })
 
     electronProcess.on('exit', () => {
-      server.close()
+      server.close().then(_data => {
+        console.log(`server closed`)
+      }).catch(error => {
+        console.error(error)
+      })
     })
   }
 

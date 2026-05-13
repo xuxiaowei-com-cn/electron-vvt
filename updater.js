@@ -33,7 +33,7 @@ app.on('ready', function () {
 
   // 检查更新：启动程序后立即执行
   autoUpdater.checkForUpdates().then((updateCheckResult) => {
-    logUpdater.info('UpdateCheckResult.updateInfo:\n', updateCheckResult.updateInfo)
+    logUpdater.info('UpdateCheckResult.updateInfo:\n', updateCheckResult?.updateInfo)
   })
 })
 

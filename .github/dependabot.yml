@@ -10,6 +10,6 @@ updates:
     directory: "/" # Location of package manifests
     open-pull-requests-limit: 50
     schedule:
-      interval: "daily"
+      interval: "weekly"
       time: "00:00"
       timezone: "Asia/Shanghai"

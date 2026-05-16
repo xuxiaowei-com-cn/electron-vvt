@@ -50,37 +50,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Mac Build & Publish
-        if: ${{ matrix.os == 'macos-latest' && github.event_name != 'pull_request' }}
-        env:
-          CSC_LINK: ${{ secrets.MAC_CERT_BASE64 }}
-          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERT_PASSWORD }}
-        run: npm run build:publish
-
-      - name: Mac Build
-        if: ${{ matrix.os == 'macos-latest' && github.event_name == 'pull_request' }}
+      - name: Mac Build with npm
+        if: ${{ matrix.os == 'macos-latest' }}
         run: npm run build
 
-      - name: Windows Build & Publish
-        if: ${{ matrix.os == 'windows-latest' && github.event_name != 'pull_request' }}
-        env:
-          CSC_LINK: ${{ secrets.WINDOWS_CERT_BASE64 }}
-          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
-        run: npm run build:publish
-
-      - name: Windows Build
-        if: ${{ matrix.os == 'windows-latest' && github.event_name == 'pull_request' }}
+      - name: Windows Build with npm
+        if: ${{ matrix.os == 'windows-latest' }}
         run: npm run build
 
-      - name: Linux Build & Publish
-        if: ${{ matrix.os == 'ubuntu-latest' && github.event_name != 'pull_request' }}
-        env:
-          CSC_LINK: ${{ secrets.LINUX_CERT_BASE64 }}
-          CSC_KEY_PASSWORD: ${{ secrets.LINUX_CERT_PASSWORD }}
-        run: npm run build:publish
-
-      - name: Linux Build
-        if: ${{ matrix.os == 'ubuntu-latest' && github.event_name == 'pull_request' }}
+      - name: Linux Build with npm
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: npm run build
 
       - name: List files in release folder

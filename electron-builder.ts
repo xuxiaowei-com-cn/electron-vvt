@@ -41,13 +41,15 @@ export default <Configuration>{
     target: [
       {
         target: 'dmg',
-        arch: ['arm64', 'x64', 'universal'],
+        // 'universal'
+        arch: ['arm64', 'x64'],
       },
       // 无论如何都要启用 zip，否则会影响 'dmg' 包中的自动更新
-      {
-        target: 'zip',
-        arch: ['arm64', 'x64', 'universal'],
-      },
+      // {
+      //   target: 'zip',
+      //   // 'universal'
+      //   arch: ['arm64', 'x64'],
+      // },
     ],
   },
   linux: {

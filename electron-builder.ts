@@ -53,6 +53,9 @@ export default <Configuration>{
       // },
     ],
   },
+  win: {
+    icon: 'build/1024x1024.png'
+  },
   linux: {
     target: [
       {

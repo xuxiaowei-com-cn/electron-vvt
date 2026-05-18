@@ -38,6 +38,7 @@ export default <Configuration>{
     output: 'release/${version}',
   },
   mac: {
+    icon: 'build/icon.icns',
     target: [
       {
         target: 'dmg',

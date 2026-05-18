@@ -31,7 +31,7 @@ export default <Configuration>{
     // 预加载文件
     'preload.js',
     // 更新配置文件
-    'updater.js',
+    'updater.ts',
   ],
   // 生成资源的目录
   directories: {

@@ -8,7 +8,7 @@ import Store from 'electron-store'
 import fs from 'fs/promises'
 
 import './menu.ts'
-import './updater.js'
+import './updater.ts'
 
 interface StoreSchema {
   devTools?: boolean

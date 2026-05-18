@@ -83,7 +83,7 @@ electron-vvt/
 ├── menu.ts                          # Electron 菜单配置
 ├── preload.js                       # Electron 预加载脚本
 ├── renderer.js                      # 渲染进程独立脚本
-├── updater.js                       # 自动更新逻辑
+├── updater.ts                       # 自动更新逻辑
 ├── electron-builder.ts              # Electron Builder 配置
 ├── vite.config.ts                   # Vite 配置
 ├── vite.electron-plugin.ts          # Vite Electron 插件

@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url'
 import path from 'path'
 import { readFile } from 'fs/promises'
 
-import { update } from './updater.js'
+import { update } from './updater.ts'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 

@@ -18,6 +18,8 @@
     "dev": "vite",
     "build:vite": "npm run type-check && vite build",
     "build": "npm run build:vite && electron-builder",
+    "build:mac:dmg:arm64": "npm run build -- --mac dmg --arm64",
+    "build:mac:dmg:x64": "npm run build -- --mac dmg --x64",
     "build:publish": "npm run build -- --publish always",
     "preview": "vite preview",
     "type-check": "vue-tsc -b"

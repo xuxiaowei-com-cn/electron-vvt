@@ -16,8 +16,8 @@
     "pre:yarn": "yarn install --registry https://registry.npmmirror.com || yarn install --registry https://registry.npmjs.org",
     "pre:pnpm": "pnpm install --registry https://registry.npmmirror.com || pnpm install --registry https://registry.npmjs.org",
     "dev": "vite",
-    "build-only": "vite build",
-    "build": "vue-tsc -b && vite build && electron-builder",
+    "build:vite": "npm run type-check && vite build",
+    "build": "npm run build:vite && electron-builder",
     "build:publish": "npm run build -- --publish always",
     "preview": "vite preview",
     "type-check": "vue-tsc -b"

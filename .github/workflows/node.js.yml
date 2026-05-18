@@ -43,9 +43,17 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Delete .npmrc
+      - name: Comment out mirror sources in .npmrc
         shell: sh
-        run: rm -rf .npmrc
+        run: |
+          echo "=== Before ==="
+          cat .npmrc
+          sed -i.bak 's/^registry=/#registry=/' .npmrc
+          sed -i.bak 's/^electron_mirror=/#electron_mirror=/' .npmrc
+          sed -i.bak 's/^electron_builder_binaries_mirror=/#electron_builder_binaries_mirror=/' .npmrc
+          rm -f .npmrc.bak
+          echo "=== After ==="
+          cat .npmrc
 
       - name: Install dependencies
         run: npm install

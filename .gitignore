@@ -23,6 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+/.npmrc.bak
+
 /yarn.lock
 /pnpm-lock.yaml
 /package-lock.json

@@ -57,6 +57,7 @@ export default <Configuration>{
     icon: 'build/1024x1024.png'
   },
   linux: {
+    icon: 'build/1024x1024.png',
     target: [
       {
         target: 'AppImage',

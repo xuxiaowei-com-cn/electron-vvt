@@ -35,12 +35,12 @@ loader.transports.file.fileName = 'loader.log'
 loader.scope.defaultLabel = 'loader'
 loader.scope.labelPadding = 8
 
-const devTools = store.get('devTools')
+const devTools = /** @type {boolean | undefined} */ (store.get('devTools'))
 if (typeof devTools !== 'boolean') {
   store.set('devTools', process.env.NODE_ENV === 'development')
 }
 
-let userAgent = store.get('userAgent')
+let userAgent = /** @type {string | undefined} */ (store.get('userAgent'))
 
 // Windows 开发：C:\Users\%USERPROFILE%\AppData\Roaming\Electron\config.json
 // Windows 安装：C:\Users\%USERPROFILE%\AppData\Roaming\项目名称\config.json

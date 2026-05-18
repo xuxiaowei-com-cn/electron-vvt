@@ -14,7 +14,15 @@ app.whenReady().then(() => {
   // 获取默认菜单
   const applicationMenu = Menu.getApplicationMenu()
 
+  if (!applicationMenu) {
+    return
+  }
+
   // 深度克隆菜单结构的工具函数
+  /**
+   * @param {any} menuItem
+   * @returns {any}
+   */
   const convertMenuItem = (menuItem) => {
     return {
       role: menuItem.role,
@@ -37,11 +45,12 @@ app.whenReady().then(() => {
   }
 
   // 克隆原有菜单结构（支持嵌套）
+  /** @type {any[]} */
   const newTemplate = applicationMenu.items.map(convertMenuItem)
 
   // 查找 Mac 系统的 appMenu 菜单
-  const appMenuMenu = newTemplate.find((item) => item.role === 'appmenu')
-  const aboutIndex = appMenuMenu?.submenu.findIndex((item) => item.role === 'about')
+  const appMenuMenu = newTemplate.find((/** @type {any} */ item) => item.role === 'appmenu')
+  const aboutIndex = appMenuMenu?.submenu.findIndex((/** @type {any} */ item) => item.role === 'about')
   if (aboutIndex !== -1) {
     // 在 Mac 系统 about 菜单项之后插入 检查并更新菜单
     appMenuMenu?.submenu.splice(aboutIndex + 1, 0, {

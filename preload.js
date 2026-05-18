@@ -10,6 +10,10 @@
 console.log('preload.js')
 
 window.addEventListener('DOMContentLoaded', () => {
+  /**
+   * @param {string} selector
+   * @param {string} text
+   */
   const replaceText = (selector, text) => {
     const element = document.getElementById(selector)
     if (element) {
@@ -18,6 +22,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   for (const type of ['chrome', 'node', 'electron']) {
-    replaceText(`${type}-version`, process.versions[type])
+    replaceText(`${type}-version`, /** @type {string} */ (process.versions[type]))
   }
 })

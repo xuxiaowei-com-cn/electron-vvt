@@ -25,7 +25,7 @@ export default <Configuration>{
     // Vite 打包后的文件
     'dist/**/*',
     // 程序入口文件
-    'main.js',
+    'main.ts',
     // 菜单配置文件
     'menu.js',
     // 预加载文件

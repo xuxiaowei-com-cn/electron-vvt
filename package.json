@@ -10,7 +10,7 @@
   },
   "license": "Apache-2.0",
   "homepage": "https://github.com/xuxiaowei-com-cn/electron-vvt#readme",
-  "main": "main.js",
+  "main": "main.ts",
   "scripts": {
     "pre:npm": "npm install --registry https://registry.npmmirror.com || npm install --registry https://registry.npmjs.org",
     "pre:yarn": "yarn install --registry https://registry.npmmirror.com || yarn install --registry https://registry.npmjs.org",

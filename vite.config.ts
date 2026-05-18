@@ -12,7 +12,7 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     electronPlugin({
-      entry: 'main.js',
+      entry: 'main.ts',
       copy: [
         {
           source: 'renderer.js',

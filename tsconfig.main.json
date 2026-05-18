@@ -21,5 +21,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["main.js", "menu.js", "preload.js", "renderer.js", "updater.js"]
+  "include": ["main.ts", "menu.js", "preload.js", "renderer.js", "updater.js"]
 }

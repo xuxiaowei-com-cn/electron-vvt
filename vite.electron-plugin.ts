@@ -19,7 +19,7 @@ export interface ElectronCopyOptions {
 export interface ElectronPluginOptions {
   /**
    * Electron 主进程入口文件路径
-   * @default 'main.js'
+   * @default 'main.ts'
    */
   entry?: string
 
@@ -62,7 +62,7 @@ function electronServer(
   server: ViteDevServer | PreviewServer,
   _isPreview: boolean,
 ) {
-  const { entry = 'main.js' } = options
+  const { entry = 'main.ts' } = options
   let electronProcess: ChildProcess | null = null
 
   const electronCmd = electron.toString()

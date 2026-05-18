@@ -10,7 +10,15 @@ import fs from 'fs/promises'
 import './menu.js'
 import './updater.js'
 
-const store = new Store()
+interface StoreSchema {
+  devTools?: boolean
+  userAgent?: string
+}
+
+const DEV_TOOLS = 'devTools'
+const USER_AGENT = 'userAgent'
+
+const store = new Store<StoreSchema>()
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
@@ -35,12 +43,12 @@ loader.transports.file.fileName = 'loader.log'
 loader.scope.defaultLabel = 'loader'
 loader.scope.labelPadding = 8
 
-const devTools = /** @type {boolean | undefined} */ (store.get('devTools'))
+const devTools = store.get(DEV_TOOLS)
 if (typeof devTools !== 'boolean') {
-  store.set('devTools', process.env.NODE_ENV === 'development')
+  store.set(DEV_TOOLS, process.env.NODE_ENV === 'development')
 }
 
-let userAgent = /** @type {string | undefined} */ (store.get('userAgent'))
+let userAgent = store.get(USER_AGENT)
 
 // Windows 开发：C:\Users\%USERPROFILE%\AppData\Roaming\Electron\config.json
 // Windows 安装：C:\Users\%USERPROFILE%\AppData\Roaming\项目名称\config.json
@@ -95,9 +103,8 @@ const createWindow = () => {
 
   // 移除 默认的 UserAgent 中的 Electron 标识
   const webContents = mainWindow.webContents
-  userAgent =
-    userAgent == null ? webContents.getUserAgent().replace(/ Electron\/[\d.]+/g, '') : userAgent
-  store.set('userAgent', userAgent)
+  userAgent = userAgent ?? webContents.getUserAgent().replace(/ Electron\/[\d.]+/g, '')
+  store.set(USER_AGENT, userAgent)
   webContents.setUserAgent(userAgent)
 
   if (process.env.VITE_SERVER_URL) {

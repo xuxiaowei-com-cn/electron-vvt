@@ -7,7 +7,7 @@ import log from 'electron-log'
 import Store from 'electron-store'
 import fs from 'fs/promises'
 
-import './menu.js'
+import './menu.ts'
 import './updater.js'
 
 interface StoreSchema {

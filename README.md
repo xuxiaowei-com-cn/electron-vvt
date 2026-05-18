@@ -80,7 +80,7 @@ electron-vvt/
 │   └── style.css                    # 全局样式
 ├── index.html                       # HTML 入口
 ├── main.ts                          # Electron 主进程
-├── menu.js                          # Electron 菜单配置
+├── menu.ts                          # Electron 菜单配置
 ├── preload.js                       # Electron 预加载脚本
 ├── renderer.js                      # 渲染进程独立脚本
 ├── updater.js                       # 自动更新逻辑

@@ -27,7 +27,7 @@ export default <Configuration>{
     // 程序入口文件
     'main.ts',
     // 菜单配置文件
-    'menu.js',
+    'menu.ts',
     // 预加载文件
     'preload.js',
     // 更新配置文件

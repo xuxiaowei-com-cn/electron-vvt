@@ -55,7 +55,7 @@
     "@vue/tsconfig": "0.9.1",
     "electron": "42.1.0",
     "electron-builder": "26.8.1",
-    "pinia": "3.0.4",
+    "pinia": "4.0.3",
     "typescript": "6.0.3",
     "vite": "8.0.13",
     "vite-plugin-vue-devtools": "8.1.2",

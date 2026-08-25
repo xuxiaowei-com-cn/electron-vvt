@@ -1,37 +1,7 @@
 {
   "name": "electron-vvt",
-  "description": "Electron、Vue、Vite、TypeScript 框架",
   "version": "0.0.4-dev.1",
-  "type": "module",
-  "author": {
-    "name": "徐晓伟",
-    "email": "xuxiaowei@xuxiaowei.com.cn",
-    "url": "https://xuxiaowei.com.cn"
-  },
-  "license": "Apache-2.0",
-  "homepage": "https://github.com/xuxiaowei-com-cn/electron-vvt#readme",
-  "main": "main.ts",
-  "scripts": {
-    "pre:npm": "npm install --registry https://registry.npmmirror.com || npm install --registry https://registry.npmjs.org",
-    "pre:yarn": "yarn install --registry https://registry.npmmirror.com || yarn install --registry https://registry.npmjs.org",
-    "pre:pnpm": "pnpm install --registry https://registry.npmmirror.com || pnpm install --registry https://registry.npmjs.org",
-    "dev": "vite",
-    "build:vite": "npm run type-check && vite build",
-    "build": "npm run build:vite && electron-builder",
-    "build:mac:dmg:arm64": "npm run build -- --mac dmg --arm64",
-    "build:mac:dmg:x64": "npm run build -- --mac dmg --x64",
-    "build:publish": "npm run build -- --publish always",
-    "preview": "vite preview",
-    "type-check": "vue-tsc -b"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/xuxiaowei-com-cn/electron-vvt.git"
-  },
-  "bugs": {
-    "email": "xuxiaowei@xuxiaowei.com.cn",
-    "url": "https://github.com/xuxiaowei-com-cn/electron-vvt/issues"
-  },
+  "description": "Electron、Vue、Vite、TypeScript 框架",
   "keywords": [
     "electron",
     "electron-builder",
@@ -44,27 +14,73 @@
     "vue",
     "vue-router"
   ],
+  "homepage": "https://github.com/xuxiaowei-com-cn/electron-vvt#readme",
+  "bugs": {
+    "url": "https://github.com/xuxiaowei-com-cn/electron-vvt/issues",
+    "email": "xuxiaowei@xuxiaowei.com.cn"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "徐晓伟",
+    "email": "xuxiaowei@xuxiaowei.com.cn",
+    "url": "https://xuxiaowei.com.cn"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xuxiaowei-com-cn/electron-vvt.git"
+  },
+  "type": "module",
+  "main": "main.ts",
+  "scripts": {
+    "pre:npm": "npm install --registry https://registry.npmmirror.com || npm install --registry https://registry.npmjs.org",
+    "pre:yarn": "yarn install --registry https://registry.npmmirror.com || yarn install --registry https://registry.npmjs.org",
+    "pre:pnpm": "pnpm install --registry https://registry.npmmirror.com || pnpm install --registry https://registry.npmjs.org",
+    "dev": "vite",
+    "build:vite": "npm run type-check && vite build",
+    "build": "npm run build:vite && electron-builder",
+    "build:mac:dmg:arm64": "npm run build -- --mac dmg --arm64",
+    "build:mac:dmg:x64": "npm run build -- --mac dmg --x64",
+    "build:publish": "npm run build -- --publish always",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --build",
+    "lint": "run-s \"lint:*\"",
+    "lint:oxlint": "oxlint . --fix",
+    "lint:eslint": "eslint . --fix --cache",
+    "format": "oxfmt src/ *.json"
+  },
   "dependencies": {
     "electron-log": "5.4.4",
     "electron-store": "11.0.2",
-    "electron-updater": "6.8.3"
+    "electron-updater": "6.8.9"
   },
   "devDependencies": {
-    "@types/node": "25.8.0",
-    "@vitejs/plugin-vue": "6.0.7",
+    "@tsconfig/node24": "24.0.5",
+    "@types/fs-extra": "11.0.4",
+    "@types/node": "24.13.3",
+    "@vitejs/plugin-vue": "6.0.8",
+    "@vue/eslint-config-typescript": "14.9.0",
     "@vue/tsconfig": "0.9.1",
-    "electron": "42.1.0",
-    "electron-builder": "26.8.1",
-    "pinia": "3.0.4",
+    "electron": "43.4.1",
+    "electron-builder": "26.15.3",
+    "eslint": "10.9.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-oxlint": "1.73.0",
+    "eslint-plugin-vue": "10.9.2",
+    "jiti": "2.7.0",
+    "npm-run-all2": "9.0.3",
+    "oxfmt": "0.59.0",
+    "oxlint": "1.73.0",
+    "pinia": "4.0.3",
     "typescript": "6.0.3",
-    "vite": "8.0.13",
-    "vite-plugin-vue-devtools": "8.1.2",
-    "vue": "3.5.34",
-    "vue-router": "5.0.7",
-    "vue-tsc": "3.2.9"
+    "vite": "8.2.2",
+    "vite-plugin-vue-devtools": "8.2.1",
+    "vue": "3.5.41",
+    "vue-eslint-parser": "10.4.1",
+    "vue-router": "5.2.0",
+    "vue-tsc": "3.3.11"
   },
   "engines": {
-    "node": ">=20.19.0 || >= 22.12.0",
+    "node": "^22.18.0 || >=24.12.0",
     "npm": ">= 11"
   }
 }

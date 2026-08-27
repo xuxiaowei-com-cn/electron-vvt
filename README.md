@@ -1,5 +1,3 @@
-
-
 # Electron + Vue 3 + Vite + TypeScript
 
 基于 Electron、Vue 3、Vite、TypeScript 的桌面应用启动模板。

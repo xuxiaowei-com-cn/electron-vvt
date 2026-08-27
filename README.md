@@ -58,6 +58,11 @@ electron-vvt/
 │   │   ├── node.js.yml              # Node.js CI
 │   │   └── npm-publish.yml          # npm 发布
 │   └── dependabot.yml               # 依赖自动更新
+├── build/
+│   ├── generate-icns.sh             # 生成 icns 图标的脚本
+│   ├── icon.icns                    # macOS 应用图标
+│   ├── icon.iconset/                # 多尺寸图标集
+│   └── 1024x1024.png                # 应用图标源图
 ├── public/
 │   ├── favicon.svg                  # 网站图标
 │   └── icons.svg                    # SVG 图标集
@@ -78,9 +83,16 @@ electron-vvt/
 │   ├── App.vue                      # 根组件（含导航）
 │   ├── main.ts                      # 应用入口
 │   └── style.css                    # 全局样式
+├── .editorconfig                    # 编辑器统一配置
+├── .gitattributes                   # Git 属性配置
 ├── .gitignore
 ├── .npmrc                           # npm 镜像配置
+├── .oxfmtrc.json                    # Oxc 格式化配置
+├── .oxlintrc.json                   # Oxc lint 配置
 ├── electron-builder.ts              # Electron Builder 配置
+├── env.d.ts                         # 环境类型声明
+├── eslint.config.ts                 # ESLint 配置
+├── gitmoji.md                       # Gitmoji 提交规范
 ├── index.html                       # HTML 入口
 ├── LICENSE
 ├── main.ts                          # Electron 主进程
@@ -90,6 +102,7 @@ electron-vvt/
 ├── renderer.js                      # 渲染进程独立脚本
 ├── tsconfig.app.json                # 应用 TypeScript 配置
 ├── tsconfig.json                    # TypeScript 配置（引用）
+├── tsconfig.main.json               # 主进程 TypeScript 配置
 ├── tsconfig.node.json               # Node 端 TypeScript 配置
 ├── updater.ts                       # 自动更新逻辑
 ├── vite.config.ts                   # Vite 配置

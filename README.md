@@ -33,7 +33,7 @@ npm run type-check
 npm run build
 
 # 仅构建前端
-npm run build-only
+npm run build:vite
 
 # 构建并发布（自动更新通道）
 npm run build:publish

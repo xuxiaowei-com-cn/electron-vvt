@@ -78,22 +78,22 @@ electron-vvt/
 │   ├── App.vue                      # 根组件（含导航）
 │   ├── main.ts                      # 应用入口
 │   └── style.css                    # 全局样式
+├── .gitignore
+├── .npmrc                           # npm 镜像配置
+├── electron-builder.ts              # Electron Builder 配置
 ├── index.html                       # HTML 入口
+├── LICENSE
 ├── main.ts                          # Electron 主进程
 ├── menu.ts                          # Electron 菜单配置
+├── package.json
 ├── preload.js                       # Electron 预加载脚本
 ├── renderer.js                      # 渲染进程独立脚本
-├── updater.ts                       # 自动更新逻辑
-├── electron-builder.ts              # Electron Builder 配置
-├── vite.config.ts                   # Vite 配置
-├── vite.electron-plugin.ts          # Vite Electron 插件
-├── tsconfig.json                    # TypeScript 配置（引用）
 ├── tsconfig.app.json                # 应用 TypeScript 配置
+├── tsconfig.json                    # TypeScript 配置（引用）
 ├── tsconfig.node.json               # Node 端 TypeScript 配置
-├── .npmrc                           # npm 镜像配置
-├── .gitignore
-├── LICENSE
-└── package.json
+├── updater.ts                       # 自动更新逻辑
+├── vite.config.ts                   # Vite 配置
+└── vite.electron-plugin.ts          # Vite Electron 插件
 ```
 
 ## 打包配置

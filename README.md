@@ -1,3 +1,5 @@
+
+
 # Electron + Vue 3 + Vite + TypeScript
 
 基于 Electron、Vue 3、Vite、TypeScript 的桌面应用启动模板。
@@ -33,7 +35,7 @@ npm run type-check
 npm run build
 
 # 仅构建前端
-npm run build-only
+npm run build:vite
 
 # 构建并发布（自动更新通道）
 npm run build:publish

@@ -57,7 +57,7 @@
     "@tsconfig/node24": "24.0.5",
     "@types/fs-extra": "11.0.4",
     "@types/node": "24.13.3",
-    "@vitejs/plugin-vue": "6.0.8",
+    "@vitejs/plugin-vue": "6.0.10",
     "@vue/eslint-config-typescript": "14.9.0",
     "@vue/tsconfig": "0.9.1",
     "electron": "43.4.1",

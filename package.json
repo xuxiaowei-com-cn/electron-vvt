@@ -51,7 +51,7 @@
   "dependencies": {
     "electron-log": "5.4.4",
     "electron-store": "11.0.2",
-    "electron-updater": "6.8.9"
+    "electron-updater": "6.8.11"
   },
   "devDependencies": {
     "@tsconfig/node24": "24.0.5",
